@@ -4,12 +4,32 @@ app.config(function($stateProvider) {
 	$stateProvider.state('main', {
 		url: '/',
 		templateUrl: '/main.html',
-		controller: 'MainController'
-			// RESOLVE!
-	})
-})
+		controller: 'MainController',
+		resolve: {
+			users: function(User) {
+				return User.findAll()
+				.then(function (userObjects){
+					// console.log(userObjects);
+					return userObjects.map(function(obj){
+						var user = User.createInstance(obj);
+						return User.inject(user);
+					});
+				});
+			},
+			posts: function(Post, users){
+				return Post.findAll({});
+			}
 
-app.controller('MainController', function($scope) {
+
+		}
+	});
+});
+
+app.controller('MainController', function($scope, posts, Post) {
+	var dataInJsDataCache = Post.getAll();
+	$scope.allPosts = posts;
+	
+
 
  	/*
 		TODOS: 
@@ -18,6 +38,7 @@ app.controller('MainController', function($scope) {
 		and retrieve the data there)
 
  	*/
-})
+
+});
 
 

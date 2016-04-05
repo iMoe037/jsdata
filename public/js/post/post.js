@@ -5,6 +5,12 @@ app.config(function($stateProvider) {
 		url: '/post/:postId',
 		templateUrl: 'js/post/post.html',
 		controller: 'PostCtrl', 
+		resolve: {
+			post: function(Post, $stateParams){
+				return Post.find($stateParams.postId);
+
+			}
+		}
 		/*
 				add a resolve block that retrieves all the users
 				so that the author field of the posts will be automatically 
@@ -14,7 +20,8 @@ app.config(function($stateProvider) {
 });
 
 // add necessary dependencies 
-app.controller('PostCtrl', function() {
+app.controller('PostCtrl', function($scope, post) {
+		$scope.post = post;
 
 
 	/* 1. FIND POST
